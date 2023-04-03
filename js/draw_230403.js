@@ -31,7 +31,8 @@ function draw_box(boxData) {
 
     let isFill=false;
     //Mouse Check
-
+    if(boxData.minPt.x<= mouseX && mouseX <= boxData.maxPt.x && boxData.minPt.y <=mouseY&& mouseY <= boxData.maxPt.y)
+    isFill=true;
     ctx.beginPath();
     ctx.rect(boxData.minPt.x, boxData.minPt.y, boxData.maxPt.x - boxData.minPt.x, boxData.maxPt.y - boxData.minPt.y);
     if (isFill)
@@ -43,7 +44,10 @@ function draw_box(boxData) {
 function draw_circle(circleData) {
     let isFill=false;
     //Mouse Check
-    
+    let mouseXY= new THREE.Vector2(mouseX,mouseY)
+    if(mouseXY.distanceTo(circleData.ctr)<=circleData.radius)
+    isFill=true;
+
     ctx.beginPath();
     ctx.arc(circleData.ctr.x, circleData.ctr.y, circleData.radius, 0, 2 * Math.PI);
     ctx.stroke();
