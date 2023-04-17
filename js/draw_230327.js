@@ -37,6 +37,8 @@ function box_box_collision(pMin, pMax, qMin, qMax) {
   let qw = qMax.x - qMin.x;
   let ph = pMax.y - pMin.y;
   let qh = qMax.y - qMin.y;
+  console.log(qMin.x +", "+qMin.y)
+  console.log(qMax.x+", "+qMax.y)
   //Need to write...
   if ((qMax.x>pMin.x && qMin.x<pMax.x) && (qMax.y>pMin.y && qMin.y<pMax.y))
     return true;
