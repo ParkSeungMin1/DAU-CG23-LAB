@@ -60,7 +60,7 @@ function draw_bezier(ctrlPts) {
 
 }
 
-//bezier functions
+//bezier function
 function Berstein_polynomial(n, i, t) {
   let binomial_coefficient = factorial(n) / (factorial(i) * factorial(n - i));
   let mid = Math.pow(t, i);
