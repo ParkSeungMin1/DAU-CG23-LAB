@@ -20,41 +20,94 @@ function draw_line(p0, p1) {
     ctx.stroke();
 }
 
-function draw_triangle(triData)
-{
-    draw_line(triData.pt0,triData.pt1);
-    draw_line(triData.pt1,triData.pt2);
-    draw_line(triData.pt2,triData.pt0);
+function ccw(p1, p2, p3) {
+    return p1.x*p2.y + p2.x*p3.y + p3.x*p1.y - p2.x*p1.y - p3.x*p2.y - p1.x*p3.y
+}
+
+function triangleAreaX2(tri) {
+    return Math.abs(tri.pt0.x*tri.pt1.y + tri.pt1.x*tri.pt2.y + tri.pt2.x*tri.pt0.y
+                    - tri.pt1.x*tri.pt0.y - tri.pt2.x*tri.pt1.y - tri.pt0.x*tri.pt2.y)
+}
+
+function draw_triangle(triData) {
+    ctx.strokeStyle = "black"
+    ctx.fillStyle = "black"
+
+    ctx.beginPath()
+    ctx.moveTo(triData.pt0.x, triData.pt0.y)
+    ctx.lineTo(triData.pt1.x, triData.pt1.y)
+    ctx.lineTo(triData.pt2.x, triData.pt2.y)
+    ctx.closePath()
+
+    let mousePt = new THREE.Vector2(mouseX, mouseY)
+    let isFill = false
+
+    // 방법 1
+    if (triangleAreaX2({pt0: triData.pt0, pt1: triData.pt1, pt2: mousePt})
+        + triangleAreaX2({pt0: triData.pt1, pt1: triData.pt2, pt2: mousePt})
+        + triangleAreaX2({pt0: triData.pt2, pt1: triData.pt0, pt2: mousePt})
+        == triangleAreaX2(triData)) {
+            isFill = true
+    }
+
+    // 방법 2
+    // if ((ccw(triData.pt0, triData.pt1, mousePt) > 0 && ccw(triData.pt1, triData.pt2, mousePt) > 0 && ccw(triData.pt2, triData.pt0, mousePt) > 0) ||
+    //     (ccw(triData.pt0, triData.pt1, mousePt) < 0 && ccw(triData.pt1, triData.pt2, mousePt) < 0 && ccw(triData.pt2, triData.pt0, mousePt) < 0)) {
+    //         isFill = true
+    // }
+
+    if (isFill) {
+        ctx.fill()
+    }
+    else {
+        ctx.stroke()
+    }
 }
 
 function draw_box(boxData) {
 
     let isFill=false;
     //Mouse Check
-    if(boxData.minPt.x<= mouseX && mouseX <= boxData.maxPt.x && boxData.minPt.y <=mouseY&& mouseY <= boxData.maxPt.y)
-    isFill=true;
+    if (boxData.minPt.x <= mouseX && mouseX <= boxData.maxPt.x && boxData.minPt.y <= mouseY && mouseY <= boxData.maxPt.y)
+        isFill = true
+
     ctx.beginPath();
     ctx.rect(boxData.minPt.x, boxData.minPt.y, boxData.maxPt.x - boxData.minPt.x, boxData.maxPt.y - boxData.minPt.y);
-    if (isFill)
+    if (isFill) {
+        ctx.fillStyle = "red"
         ctx.fill();
-    else
+    }
+    else {
+        ctx.strokeStyle = "black"
         ctx.stroke();
+    }
 }
 
 function draw_circle(circleData) {
     let isFill=false;
     //Mouse Check
-    let mouseXY= new THREE.Vector2(mouseX,mouseY)
-    if(mouseXY.distanceTo(circleData.ctr)<=circleData.radius)
-    isFill=true;
+    // 방법 1
+    // if ((mouseX - circleData.ctr.x)*(mouseX - circleData.ctr.x) + (mouseY - circleData.ctr.y)*(mouseY - circleData.ctr.y) <= circleData.radius * circleData.radius)
+    //     isFill = true
 
+    // 방법 2
+    let mousePt = new THREE.Vector2(mouseX, mouseY)
+    if (mousePt.distanceTo(circleData.ctr) <= circleData.radius)
+        isFill = true
+    
     ctx.beginPath();
     ctx.arc(circleData.ctr.x, circleData.ctr.y, circleData.radius, 0, 2 * Math.PI);
     ctx.stroke();
-    if (isFill)
+    if (isFill) {
+        ctx.fillStyle = "blue"
+        ctx.strokeStyle = "blue"
         ctx.fill();
-    else
         ctx.stroke();
+    }
+    else {
+        ctx.strokeStyle = "black"
+        ctx.stroke();
+    }
 }
 
 function draw_image() {

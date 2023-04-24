@@ -1,13 +1,23 @@
-let c = document.getElementById("myCanvas");
-let ctx = c.getContext("2d");
+let c = document.getElementById("myCanvas")
+let ctx = c.getContext("2d")
 let ctrlPts = [];
 let isClicked = false;
 let clickIdx = -1;
+let aboveIdx = -1;
 
+// CP가 4개일 때는 3차 베지어 곡선이 생성된다.
 ctrlPts.push(new THREE.Vector2(100, 400));
+ctrlPts.push(new THREE.Vector2(120, 300));
+
 ctrlPts.push(new THREE.Vector2(200, 200));
-ctrlPts.push(new THREE.Vector2(300, 200));
+ctrlPts.push(new THREE.Vector2(250, 150));
+ctrlPts.push(new THREE.Vector2(270, 130));
+
+ctrlPts.push(new THREE.Vector2(300, 120));
+ctrlPts.push(new THREE.Vector2(350, 200));
+
 ctrlPts.push(new THREE.Vector2(400, 400));
+
 
 function draw_point(p, color) {
   ctx.fillStyle = color;
@@ -29,11 +39,18 @@ function draw_bezier(ctrlPts) {
   for (let i = 0; i < ctrlPts.length - 1; i++)
     draw_line(ctrlPts[i], ctrlPts[i + 1], "#000000");
 
-  for (let i = 0; i < ctrlPts.length; i++)
-    draw_point(ctrlPts[i], "#000000");
+  for (let i = 0; i < ctrlPts.length; i++) {
+    if (i == aboveIdx) {
+        draw_point(ctrlPts[i], "#00ff00")
+    }
+    else {
+        draw_point(ctrlPts[i], "#000000");
+    }
+  }
 
   let bezierPts = [];
-  let resolution = 10;
+  //let resolution = 10;
+  let resolution = 1; // resolution을 크게 할수록 더 부드러운 곡선이 된다. resolution이 2면 두 개의 직선으로 그려진다.
   for (let i = 0; i <= resolution; i++) {
     let t = i / resolution;
     bezierPts.push(bezier_curve(ctrlPts, t));
@@ -76,6 +93,14 @@ c.addEventListener("mousemove", function (e) {
     ctrlPts[clickIdx].x = mousePos.x;
     ctrlPts[clickIdx].y = mousePos.y;
   }
+
+  aboveIdx = -1
+  for (let i = 0; i < ctrlPts.length; i++) {
+    if (mousePos.distanceTo(ctrlPts[i]) < 10) {
+        aboveIdx = i
+    }
+  }
+
 }, false);
 
 c.addEventListener("mousedown", function (e) {

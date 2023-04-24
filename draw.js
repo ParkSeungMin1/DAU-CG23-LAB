@@ -4,7 +4,7 @@ let ctx = c.getContext("2d");
 //Make data
 let pts = [];
 pts.push(new THREE.Vector2(0, 0));
-pts.push(new THREE.Vector2(50, 50));
+pts.push(new THREE.Vector2(100, 100));
 pts.push(new THREE.Vector2(0, 100));
 pts.push(new THREE.Vector2(300, 200));
 
