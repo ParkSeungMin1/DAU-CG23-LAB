@@ -6,6 +6,7 @@ ctrlPts.push(new THREE.Vector2(100,200))
 
 function draw_point(p){
     ctx.fillStyle="#ff0000"
+    
     ctx.beginPath()
     ctx.arc(p.x,p.y,5,0,2*Math.PI)
     ctx.fill()
