@@ -21,5 +21,3 @@ function draw_line(p0,p1){
 }
 
 let moustPt = new THREE.Vector2(mouseX,mouseY)
-if(mousePt.distanceTo(circleData.ctr)<= circleData.radius)
-if (mousePt.distanceTo(circleData.ctr) <= circleData.radius)
