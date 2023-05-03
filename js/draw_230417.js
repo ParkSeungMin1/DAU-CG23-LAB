@@ -6,6 +6,8 @@ let clickIdx = -1;
 let aboveIdx = -1;
 
 // CP가 4개일 때는 3차 베지어 곡선이 생성된다.
+
+
 ctrlPts.push(new THREE.Vector2(100, 400));
 ctrlPts.push(new THREE.Vector2(120, 300));
 
