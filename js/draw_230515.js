@@ -3,8 +3,8 @@ var renderer = new THREE.WebGLRenderer({ antialias: true });
 var camera = new THREE.PerspectiveCamera(75, 1.0, 0.1, 1000);
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 var index = 0;
-
 controls.enableDamping = false; // 부드러운 감속 효과 활성화
+//controls.autoRotate=true;
 
 function loadOBJ(url) {
   var loader = new THREE.OBJLoader();
@@ -15,7 +15,6 @@ function loadOBJ(url) {
     url,
     // called when resource is loaded
     function (object) {
-
       scene.add(object);
 
     },
@@ -44,7 +43,8 @@ function initGeometry() {
   const axesHelper = new THREE.AxesHelper(); //x:red y:green z:blue 
   scene.add(axesHelper);
   loadOBJ("../models/kitten.obj");
-
+  //loadOBJ("../models/gargoyle.obj");
+  //loadOBJ("../models/bunny_stanford.obj");
 }
 
 function initRenderer() {
@@ -66,9 +66,15 @@ function init() {
 var render = function () {
   requestAnimationFrame(render);
   index++;
+  scene.children[2].rotation.y += 0.01;
+  
+   //scene.children[0].position.set(
+   //   10*Math.cos(Math.PI*index/100.0),
+   //   0,
+   //   10*Math.sin(Math.PI*index/100.0)
+   //   );
   controls.update();
   renderer.render(scene, camera);
-
 };
 
 init();
