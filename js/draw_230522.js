@@ -5,16 +5,19 @@ var camera = new THREE.PerspectiveCamera(75, 1.0, 0.1, 1000);
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 var torus;
 //Lights
-const spotLight = new THREE.SpotLight(0xffffff, 0.5, 30, Math.PI * 0.1, 0.1, 1);
-const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+const spotLight1 = new THREE.SpotLight(0xff0000, 0.5, 30, Math.PI * 0.1, 0.1, 1); // RED
+const spotLight2 = new THREE.SpotLight(0x00ff00, 0.5, 30, Math.PI * 0.1, 0.1, 1); // GREEN
+const spotLight3 = new THREE.SpotLight(0x0000ff, 0.5, 30, Math.PI * 0.1, 0.1, 1); // BLUE
+
+const spotLightHelper1 = new THREE.SpotLightHelper(spotLight1);
+const spotLightHelper2 = new THREE.SpotLightHelper(spotLight2);
+const spotLightHelper3 = new THREE.SpotLightHelper(spotLight3);
+
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-const pointLight = new THREE.PointLight(0xff9000, 0.9, 15, 3);
-const pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
 
 var gui = new dat.GUI();
 
 controls.enableDamping = true; // 부드러운 감속 효과 활성화
-pointLight.visible=false;
 
 
 function loadOBJ(url) {
@@ -46,19 +49,39 @@ function loadOBJ(url) {
 }
 
 function initLight() {
-  spotLight.position.set(0, 0, 10);
-  spotLight.castShadow = true;
-  scene.add(spotLight);
+  
+  spotLight1.castShadow = true;
+  spotLight2.castShadow = true;
+  spotLight3.castShadow = true;
+  spotLight1.position.set(-1,0,10);
+  spotLight2.position.set(1,0,10);
+  spotLight3.position.set(0,2,10);
 
+  var lightTarget1 = new THREE.Object3D();
+  var lightTarget2 = new THREE.Object3D();
+  var lightTarget3 = new THREE.Object3D();
+  lightTarget1.position.set(-1,0,0);
+  spotLight1.target = lightTarget1;
+  
+  lightTarget2.position.set(1,0,0);
+  spotLight2.target = lightTarget2;
+  
+  lightTarget3.position.set(0,2,0);
+  spotLight3.target = lightTarget3;
 
-  scene.add(spotLightHelper);
+  scene.add(spotLight1);
+  scene.add(spotLightHelper1);
+  scene.add(spotLight2);
+  scene.add(spotLightHelper2);
+  scene.add(spotLight3);
+  scene.add(spotLightHelper3);
 
 
   scene.add(ambientLight);
 
-  pointLight.position.set(-2, -2, 2);
-  scene.add(pointLight);
-  scene.add(pointLightHelper);
+//  pointLight.position.set(-2, -2, 2);
+//   scene.add(pointLight);
+//   scene.add(pointLightHelper);
 }
 
 function initGeometry() {
@@ -148,29 +171,35 @@ function initRenderer() {
 }
 
 function initGUI() {
-  gui.add(ambientLight, "visible").name("Ambient Light");
-  gui.add(spotLight, "visible").name("Spot Light");
-  gui.add(pointLight, "visible").name("Point Light");
+gui.add(ambientLight, "visible").name("Ambient Light");
 
-  gui.add(ambientLight, "intensity", 0, 1.0);
+gui.add(spotLight1, "visible").name("Spot Light RED");
+gui.add(spotLight2, "visible").name("Spot Light GREEN");
+gui.add(spotLight3, "visible").name("Spot Light BLUE");
 
-  const spotFolder = gui.addFolder('SpotLight')
-  spotFolder.add(spotLight.position, 'x', -10.0, 10.0,.01);
-  spotFolder.add(spotLight.position, 'y', -10.0, 10.0,0.1);
-  spotFolder.add(spotLight.position, 'z', -10, 10);
-  spotFolder.add(spotLight, 'angle', 0, Math.PI * 0.2);
+const spotFolder = gui.addFolder('SpotLight Red')
+spotFolder.add(spotLight1.position, 'x', -10.0, 10.0,0.1);
+spotFolder.add(spotLight1.position, 'y', -10.0, 10.0,0.1);
+spotFolder.add(spotLight1.position, 'z', -10, 10,0.1);
 
-  const pointFolder = gui.addFolder('PointLight')
-  pointFolder.add(pointLight.position, 'x', -10, 10);
-  pointFolder.add(pointLight.position, 'y', -10, 10);
-  pointFolder.add(pointLight.position, 'z', -10, 10);
-  pointFolder.add(pointLight, 'distance', 0, 100);
-  pointFolder.add(pointLight, 'decay', 0, 10);
+//   gui.add(pointLight, "visible").name("Point Light");
 
-  const torusFolder = gui.addFolder('torus')
-  torusFolder.add(torus.position, 'x', -10, 10);
-  torusFolder.add(torus.position, 'y', -10, 10);
-  torusFolder.add(torus.position, 'z', -10, 10);
+gui.add(ambientLight, "intensity", 0, 1.0);
+
+
+gui.add(spotLight3, 'angle', 0, Math.PI * 0.5);
+
+//   const pointFolder = gui.addFolder('PointLight')
+//   pointFolder.add(pointLight.position, 'x', -10, 10);
+//   pointFolder.add(pointLight.position, 'y', -10, 10);
+//   pointFolder.add(pointLight.position, 'z', -10, 10);
+//   pointFolder.add(pointLight, 'distance', 0, 100);
+//   pointFolder.add(pointLight, 'decay', 0, 10);
+
+   const torusFolder = gui.addFolder('torus')
+   torusFolder.add(torus.position, 'x', -10, 10);
+   torusFolder.add(torus.position, 'y', -10, 10);
+   torusFolder.add(torus.position, 'z', -10, 10);
 }
 
 function init() {
@@ -185,13 +214,16 @@ var render = function () {
   requestAnimationFrame(render);
   controls.update();
 
-  spotLightHelper.update();
-  pointLightHelper.update();
+  spotLightHelper1.update();
+  spotLightHelper2.update();
+  spotLightHelper3.update();
 
-  if (spotLight.visible != spotLightHelper.visible)
-    spotLightHelper.visible = spotLight.visible;
-  if (pointLight.visible != pointLightHelper.visible)
-    pointLightHelper.visible = pointLight.visible;
+  if (spotLight1.visible != spotLightHelper1.visible)
+    spotLightHelper1.visible = spotLight1.visible;
+  if (spotLight2.visible != spotLightHelper2.visible)
+    spotLightHelper2.visible = spotLight2.visible;
+  if (spotLight3.visible != spotLightHelper3.visible)
+    spotLightHelper3.visible = spotLight3.visible;
 
   renderer.render(scene, camera);
 

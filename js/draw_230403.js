@@ -7,6 +7,7 @@ let mouseX = 0, mouseY = 0;
 
 boxData.push({minPt: new THREE.Vector2(150,150), maxPt: new THREE.Vector2(350,350)});
 
+
 circleData.push({ ctr: new THREE.Vector2(50, 50), radius: 10 });
 circleData.push({ ctr: new THREE.Vector2(400, 100), radius: 50 });
 circleData.push({ ctr: new THREE.Vector2(450, 450), radius: 30 });
@@ -67,6 +68,7 @@ function draw_triangle(triData) {
 function draw_box(boxData) {
 
     let isFill=false;
+
     //Mouse Check
     if (boxData.minPt.x <= mouseX && mouseX <= boxData.maxPt.x && boxData.minPt.y <= mouseY && mouseY <= boxData.maxPt.y)
         isFill = true

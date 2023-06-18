@@ -27,7 +27,6 @@ function initGeometry() {
 
 
     //6번 지멋대로 큐브 속도 돌게 해바라
-
     for (var i = 0; i < 10; i++) {
         for (var j = 0; j < 10; j++) {
             var material0 = new THREE.MeshLambertMaterial({ color: "#8B00FF" });
